@@ -1,0 +1,77 @@
+[gd_scene format=3 uid="uid://dv7n7cwktxls8"]
+
+[ext_resource type="Script" uid="uid://cn8ivianqwi7l" path="res://scripts/SettingsScreen.gd" id="1_ajtmc"]
+[ext_resource type="Texture2D" uid="uid://b0erppkwu8vay" path="res://assets/sprites/mobile_ui/music-on.png" id="2_o7p01"]
+[ext_resource type="Texture2D" uid="uid://cg7gdg02nw6c8" path="res://assets/sprites/mobile_ui/sound-on.png" id="3_hs5wr"]
+[ext_resource type="Texture2D" uid="uid://c83addgtx" path="res://assets/sprites/mobile_ui/reset-game-data.png" id="4_ititl"]
+[ext_resource type="Texture2D" uid="uid://cxl7ds45s6k67" path="res://assets/sprites/mobile_ui/close-button.png" id="5_6etu7"]
+
+[node name="SettingsScreen" type="CanvasLayer" unique_id=1513844438 node_paths=PackedStringArray("_close_btn", "_sound_btn", "_music_btn", "_reset_btn")]
+script = ExtResource("1_ajtmc")
+_close_btn = NodePath("CloseButton")
+_sound_btn = NodePath("VBoxContainer/HBoxContainer/SoundButton")
+_music_btn = NodePath("VBoxContainer/HBoxContainer/MusicButton")
+_reset_btn = NodePath("VBoxContainer/ResetButton")
+
+[node name="ColorRect" type="ColorRect" parent="." unique_id=1224591438]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0, 0, 0, 0.6627451)
+
+[node name="VBoxContainer" type="VBoxContainer" parent="." unique_id=1815618319]
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -270.0
+offset_top = -486.0
+offset_right = 270.0
+offset_bottom = 486.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/separation = 72
+alignment = 1
+
+[node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer" unique_id=1745498134]
+layout_mode = 2
+theme_override_constants/separation = 64
+alignment = 1
+
+[node name="MusicButton" type="TextureButton" parent="VBoxContainer/HBoxContainer" unique_id=1704407574]
+custom_minimum_size = Vector2(72, 72)
+layout_mode = 2
+texture_normal = ExtResource("2_o7p01")
+ignore_texture_size = true
+stretch_mode = 0
+
+[node name="SoundButton" type="TextureButton" parent="VBoxContainer/HBoxContainer" unique_id=1145673266]
+custom_minimum_size = Vector2(72, 72)
+layout_mode = 2
+texture_normal = ExtResource("3_hs5wr")
+ignore_texture_size = true
+stretch_mode = 0
+
+[node name="ResetButton" type="TextureButton" parent="VBoxContainer" unique_id=1967645761]
+custom_minimum_size = Vector2(360, 80)
+layout_mode = 2
+size_flags_horizontal = 4
+texture_normal = ExtResource("4_ititl")
+ignore_texture_size = true
+stretch_mode = 0
+
+[node name="CloseButton" type="TextureButton" parent="." unique_id=1963190789]
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -84.0
+offset_top = 48.0
+offset_right = -24.0
+offset_bottom = 108.0
+grow_horizontal = 0
+texture_normal = ExtResource("5_6etu7")
+ignore_texture_size = true
+stretch_mode = 0

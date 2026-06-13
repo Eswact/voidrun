@@ -1,0 +1,84 @@
+[gd_scene format=3 uid="uid://benvm5qtr5ity"]
+
+[ext_resource type="Script" uid="uid://bbxj366qgb20g" path="res://scripts/NickInputScreen.gd" id="1_43esc"]
+[ext_resource type="Texture2D" uid="uid://b1j7pq6muuy63" path="res://assets/sprites/mobile_ui/confirm-button.png" id="2_43esc"]
+[ext_resource type="Texture2D" uid="uid://cxl7ds45s6k67" path="res://assets/sprites/mobile_ui/close-button.png" id="3_n4u7v"]
+
+[node name="NickInputScreen" type="CanvasLayer" unique_id=1762590571 node_paths=PackedStringArray("_nick_input", "_confirm_btn", "_status_label", "_close_btn")]
+script = ExtResource("1_43esc")
+_nick_input = NodePath("_nick_input")
+_confirm_btn = NodePath("_confirm_btn")
+_status_label = NodePath("_status_label")
+_close_btn = NodePath("CloseButton")
+
+[node name="Dim" type="ColorRect" parent="." unique_id=2000438531]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0, 0, 0, 0.6)
+
+[node name="_status_label" type="Label" parent="." unique_id=429181623]
+custom_minimum_size = Vector2(240, 64)
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -100.0
+offset_top = -112.0
+offset_right = 100.0
+offset_bottom = -48.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_font_sizes/font_size = 20
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="_nick_input" type="LineEdit" parent="." unique_id=1737174923]
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -150.0
+offset_top = -36.0
+offset_right = 150.0
+offset_bottom = 36.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_font_sizes/font_size = 28
+placeholder_text = "Unkown"
+alignment = 1
+max_length = 12
+
+[node name="_confirm_btn" type="TextureButton" parent="." unique_id=1813259361]
+custom_minimum_size = Vector2(200, 40)
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -136.0
+offset_top = 64.0
+offset_right = 136.0
+offset_bottom = 128.0
+grow_horizontal = 2
+grow_vertical = 2
+texture_normal = ExtResource("2_43esc")
+ignore_texture_size = true
+stretch_mode = 0
+
+[node name="CloseButton" type="TextureButton" parent="." unique_id=1314441260]
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -84.0
+offset_top = 48.0
+offset_right = -24.0
+offset_bottom = 108.0
+grow_horizontal = 0
+texture_normal = ExtResource("3_n4u7v")
+ignore_texture_size = true
+stretch_mode = 0

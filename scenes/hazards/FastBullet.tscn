@@ -1,0 +1,17 @@
+[gd_scene format=3 uid="uid://b3s58x3ostm5i"]
+
+[ext_resource type="PackedScene" uid="uid://h72ea82nyr3q" path="res://scenes/hazards/Bullet.tscn" id="1_rlugd"]
+[ext_resource type="Texture2D" uid="uid://c3ii124fw4fha" path="res://assets/sprites/hazards/bullets/long-bullet.png" id="2_ulrld"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_jb625"]
+size = Vector2(44, 16)
+
+[node name="Bullet" unique_id=9350986 instance=ExtResource("1_rlugd")]
+
+[node name="Sprite2D" parent="." index="0" unique_id=1158905053]
+scale = Vector2(0.16, 0.16)
+texture = ExtResource("2_ulrld")
+
+[node name="CollisionShape2D" parent="." index="1" unique_id=1764659619]
+position = Vector2(40, 0)
+shape = SubResource("RectangleShape2D_jb625")

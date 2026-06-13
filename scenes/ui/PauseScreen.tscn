@@ -1,0 +1,97 @@
+[gd_scene format=3 uid="uid://drngys817g4ll"]
+
+[ext_resource type="Texture2D" uid="uid://c8h2kbbbjr5h4" path="res://assets/sprites/mobile_ui/button.png" id="1_n2a32"]
+[ext_resource type="Script" uid="uid://cmrrq3i8hslmq" path="res://scripts/PauseScreen.gd" id="1_yv4u6"]
+[ext_resource type="FontFile" uid="uid://cup061vwhnfoq" path="res://assets/fonts/Orbitron-VariableFont_wght.ttf" id="2_uuji5"]
+[ext_resource type="Texture2D" uid="uid://b0erppkwu8vay" path="res://assets/sprites/mobile_ui/music-on.png" id="4_kh7v7"]
+[ext_resource type="Texture2D" uid="uid://cg7gdg02nw6c8" path="res://assets/sprites/mobile_ui/sound-on.png" id="5_ch3bl"]
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_yv4u6"]
+texture = ExtResource("1_n2a32")
+
+[node name="PauseScreen" type="CanvasLayer" unique_id=418257402 node_paths=PackedStringArray("_continue_btn", "_sound_btn", "_music_btn", "_menu_btn")]
+process_mode = 3
+layer = 10
+script = ExtResource("1_yv4u6")
+_continue_btn = NodePath("ContinueButton")
+_sound_btn = NodePath("SoundButton")
+_music_btn = NodePath("MusicButton")
+_menu_btn = NodePath("MenuButton")
+
+[node name="Dim" type="ColorRect" parent="." unique_id=667866261]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0, 0, 0, 0.7254902)
+
+[node name="ContinueButton" type="Button" parent="." unique_id=114301970]
+custom_minimum_size = Vector2(240, 80)
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -120.0
+offset_top = -112.0
+offset_right = 120.0
+offset_bottom = -32.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_fonts/font = ExtResource("2_uuji5")
+theme_override_font_sizes/font_size = 36
+theme_override_styles/normal = SubResource("StyleBoxTexture_yv4u6")
+text = "Continue"
+
+[node name="MenuButton" type="Button" parent="." unique_id=1850555841]
+custom_minimum_size = Vector2(240, 72)
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -120.0
+offset_top = -12.0
+offset_right = 120.0
+offset_bottom = 68.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_fonts/font = ExtResource("2_uuji5")
+theme_override_font_sizes/font_size = 36
+theme_override_styles/normal = SubResource("StyleBoxTexture_yv4u6")
+text = "Menu	"
+
+[node name="MusicButton" type="TextureButton" parent="." unique_id=712131292]
+custom_minimum_size = Vector2(72, 72)
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = 16.0
+offset_top = 88.0
+offset_right = 88.0
+offset_bottom = 160.0
+grow_horizontal = 2
+grow_vertical = 2
+texture_normal = ExtResource("4_kh7v7")
+ignore_texture_size = true
+stretch_mode = 0
+
+[node name="SoundButton" type="TextureButton" parent="." unique_id=878579363]
+custom_minimum_size = Vector2(72, 72)
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -88.0
+offset_top = 88.0
+offset_right = -16.0
+offset_bottom = 160.0
+grow_horizontal = 2
+grow_vertical = 2
+texture_normal = ExtResource("5_ch3bl")
+ignore_texture_size = true
+stretch_mode = 0

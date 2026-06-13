@@ -1,0 +1,6 @@
+[gd_scene format=3 uid="uid://b7lqwk71ohqgm"]
+
+[ext_resource type="Script" uid="uid://byybmqgwod4p7" path="res://scripts/hazards/GroundCrack.gd" id="1_43tfm"]
+
+[node name="GroundCrack" type="Node2D" unique_id=114550038]
+script = ExtResource("1_43tfm")

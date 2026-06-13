@@ -1,0 +1,23 @@
+# Godot
+.godot/
+.import/
+*.tmp
+
+# Export
+/android/
+/ios/
+export_presets.cfg
+*.apk
+*.aab
+*.ipa
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Editor
+.vscode/
+
+# Secrets
+scripts/Secrets.gd
+addons/*

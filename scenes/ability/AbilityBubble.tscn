@@ -1,0 +1,17 @@
+[gd_scene format=3 uid="uid://s37lcexqmdwl"]
+
+[ext_resource type="Script" uid="uid://coyhxtn77yjrr" path="res://scripts/ability/AbilityBubble.gd" id="1_f8a8t"]
+[ext_resource type="Texture2D" uid="uid://c0f8jngc50cax" path="res://assets/sprites/ability/clear-bubble.png" id="2_wp3d6"]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_ill5m"]
+radius = 20.0
+
+[node name="AbilityBubble" type="Area2D" unique_id=545165725]
+script = ExtResource("1_f8a8t")
+
+[node name="Sprite2D" type="Sprite2D" parent="." unique_id=1409402996]
+scale = Vector2(0.025, 0.025)
+texture = ExtResource("2_wp3d6")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1495069249]
+shape = SubResource("CircleShape2D_ill5m")

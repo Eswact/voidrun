@@ -1,0 +1,112 @@
+[gd_scene format=3 uid="uid://b08j5d3aug6vd"]
+
+[ext_resource type="Script" uid="uid://f6ftxafgb0d" path="res://scripts/LeaderboardScreen.gd" id="1_rwwky"]
+[ext_resource type="Texture2D" uid="uid://dtolsu66p1tvs" path="res://assets/sprites/mobile_ui/alltime-button.png" id="2_3hrrb"]
+[ext_resource type="Texture2D" uid="uid://cxl7ds45s6k67" path="res://assets/sprites/mobile_ui/close-button.png" id="3_3hrrb"]
+[ext_resource type="Texture2D" uid="uid://cgmcsbsn4y5ec" path="res://assets/sprites/mobile_ui/weekly-button.png" id="3_7kbg4"]
+
+[node name="LeaderboardScreen" type="CanvasLayer" unique_id=1682928852 node_paths=PackedStringArray("_close_btn", "_all_time_btn", "_weekly_btn", "_list_container", "_status_label", "_own_row")]
+script = ExtResource("1_rwwky")
+_close_btn = NodePath("CloseButton")
+_all_time_btn = NodePath("VBoxContainer/TimeButtons/AllTimeButton")
+_weekly_btn = NodePath("VBoxContainer/TimeButtons/WeeklyButton")
+_list_container = NodePath("VBoxContainer/Container/ScrollContainer/VBoxContainer")
+_status_label = NodePath("VBoxContainer/Container/Status")
+_own_row = NodePath("VBoxContainer/VBoxContainer/YourScore")
+
+[node name="ColorRect" type="ColorRect" parent="." unique_id=186347228]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0, 0, 0, 0.6627451)
+
+[node name="VBoxContainer" type="VBoxContainer" parent="." unique_id=1844359866]
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -270.0
+offset_top = -486.0
+offset_right = 270.0
+offset_bottom = 486.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/separation = 32
+alignment = 1
+
+[node name="TimeButtons" type="HBoxContainer" parent="VBoxContainer" unique_id=789851475]
+layout_mode = 2
+theme_override_constants/separation = 24
+alignment = 1
+
+[node name="AllTimeButton" type="TextureButton" parent="VBoxContainer/TimeButtons" unique_id=52643160]
+custom_minimum_size = Vector2(252, 60)
+layout_mode = 2
+texture_normal = ExtResource("2_3hrrb")
+ignore_texture_size = true
+stretch_mode = 0
+
+[node name="WeeklyButton" type="TextureButton" parent="VBoxContainer/TimeButtons" unique_id=1315735038]
+custom_minimum_size = Vector2(252, 60)
+layout_mode = 2
+texture_normal = ExtResource("3_7kbg4")
+ignore_texture_size = true
+stretch_mode = 0
+
+[node name="Container" type="Control" parent="VBoxContainer" unique_id=623441836]
+clip_contents = true
+custom_minimum_size = Vector2(0, 692)
+layout_mode = 2
+
+[node name="ScrollContainer" type="ScrollContainer" parent="VBoxContainer/Container" unique_id=1990289376]
+custom_minimum_size = Vector2(0, 692)
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+horizontal_scroll_mode = 0
+
+[node name="VBoxContainer" type="VBoxContainer" parent="VBoxContainer/Container/ScrollContainer" unique_id=19087207]
+custom_minimum_size = Vector2(540, 692)
+layout_mode = 2
+
+[node name="Status" type="Label" parent="VBoxContainer/Container" unique_id=1110949880]
+custom_minimum_size = Vector2(0, 692)
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_font_sizes/font_size = 32
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="VBoxContainer" type="VBoxContainer" parent="VBoxContainer" unique_id=565333407]
+layout_mode = 2
+
+[node name="HSeparator" type="HSeparator" parent="VBoxContainer/VBoxContainer" unique_id=2110387351]
+layout_mode = 2
+
+[node name="YourScore" type="HBoxContainer" parent="VBoxContainer/VBoxContainer" unique_id=1523236797]
+custom_minimum_size = Vector2(0, 80)
+layout_mode = 2
+alignment = 1
+
+[node name="CloseButton" type="TextureButton" parent="." unique_id=1633290641]
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -84.0
+offset_top = 48.0
+offset_right = -24.0
+offset_bottom = 108.0
+grow_horizontal = 0
+texture_normal = ExtResource("3_3hrrb")
+ignore_texture_size = true
+stretch_mode = 0

@@ -1,0 +1,133 @@
+[gd_scene format=3 uid="uid://bvlranvwye2ae"]
+
+[ext_resource type="Texture2D" uid="uid://cn0rnlvus30u2" path="res://assets/sprites/mobile_ui/restart-button.png" id="1_pli0r"]
+[ext_resource type="Script" uid="uid://bewrw3fys2y64" path="res://scripts/DeathScreen.gd" id="1_yar2g"]
+[ext_resource type="FontFile" uid="uid://cup061vwhnfoq" path="res://assets/fonts/Orbitron-VariableFont_wght.ttf" id="2_tmfs4"]
+[ext_resource type="Texture2D" uid="uid://c8h2kbbbjr5h4" path="res://assets/sprites/mobile_ui/button.png" id="2_xj0m4"]
+[ext_resource type="Texture2D" uid="uid://cyblpku7ygq6n" path="res://assets/sprites/mobile_ui/submit-score.png" id="5_mwkx4"]
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_tmfs4"]
+texture = ExtResource("2_xj0m4")
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_mwkx4"]
+texture = ExtResource("2_xj0m4")
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_n6h62"]
+texture = ExtResource("2_xj0m4")
+
+[node name="DeathScreen" type="CanvasLayer" unique_id=1314513967 node_paths=PackedStringArray("_time_label", "_best_label", "_restart_btn", "_submit_btn", "_menu_btn", "_rank_label")]
+layer = 10
+script = ExtResource("1_yar2g")
+_time_label = NodePath("Panel/info/Score/Score")
+_best_label = NodePath("Panel/info/BestScore/BestScore")
+_restart_btn = NodePath("Panel/actions/RestartButton")
+_submit_btn = NodePath("Panel/SubmitButton")
+_menu_btn = NodePath("Panel/actions/MenuButton")
+_rank_label = NodePath("Panel/info/BestScore/Rank")
+
+[node name="Dim" type="ColorRect" parent="." unique_id=1397850318]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0, 0, 0, 0.7254902)
+
+[node name="Panel" type="VBoxContainer" parent="." unique_id=1755210210]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/separation = 160
+alignment = 1
+
+[node name="info" type="VBoxContainer" parent="Panel" unique_id=1950098102]
+layout_mode = 2
+theme_override_constants/separation = 36
+
+[node name="BestScore" type="VBoxContainer" parent="Panel/info" unique_id=1024875127]
+layout_mode = 2
+
+[node name="BestScoreLabel" type="Label" parent="Panel/info/BestScore" unique_id=1396002943]
+custom_minimum_size = Vector2(272, 60)
+layout_mode = 2
+size_flags_horizontal = 4
+theme_override_fonts/font = ExtResource("2_tmfs4")
+theme_override_font_sizes/font_size = 28
+theme_override_styles/normal = SubResource("StyleBoxTexture_tmfs4")
+text = "Best Time"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="BestScore" type="Label" parent="Panel/info/BestScore" unique_id=902395760]
+custom_minimum_size = Vector2(152, 36)
+layout_mode = 2
+size_flags_horizontal = 4
+theme_override_fonts/font = ExtResource("2_tmfs4")
+theme_override_font_sizes/font_size = 28
+text = "00:00"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Rank" type="Label" parent="Panel/info/BestScore" unique_id=1114716541]
+layout_mode = 2
+theme_override_fonts/font = ExtResource("2_tmfs4")
+theme_override_font_sizes/font_size = 20
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Score" type="VBoxContainer" parent="Panel/info" unique_id=1316188119]
+layout_mode = 2
+
+[node name="ScoreLabel" type="Label" parent="Panel/info/Score" unique_id=156906510]
+custom_minimum_size = Vector2(320, 72)
+layout_mode = 2
+size_flags_horizontal = 4
+theme_override_fonts/font = ExtResource("2_tmfs4")
+theme_override_font_sizes/font_size = 48
+theme_override_styles/normal = SubResource("StyleBoxTexture_mwkx4")
+text = "Time	"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Score" type="Label" parent="Panel/info/Score" unique_id=1889335275]
+custom_minimum_size = Vector2(200, 60)
+layout_mode = 2
+size_flags_horizontal = 4
+theme_override_fonts/font = ExtResource("2_tmfs4")
+theme_override_font_sizes/font_size = 48
+text = "00:00"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="actions" type="VBoxContainer" parent="Panel" unique_id=1786060173]
+layout_mode = 2
+theme_override_constants/separation = 20
+
+[node name="RestartButton" type="TextureButton" parent="Panel/actions" unique_id=995844978]
+custom_minimum_size = Vector2(200, 164)
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+texture_normal = ExtResource("1_pli0r")
+ignore_texture_size = true
+stretch_mode = 0
+
+[node name="MenuButton" type="Button" parent="Panel/actions" unique_id=717916152]
+custom_minimum_size = Vector2(200, 72)
+layout_mode = 2
+size_flags_horizontal = 4
+theme_override_fonts/font = ExtResource("2_tmfs4")
+theme_override_font_sizes/font_size = 36
+theme_override_styles/normal = SubResource("StyleBoxTexture_n6h62")
+text = "Menu	"
+
+[node name="SubmitButton" type="TextureButton" parent="Panel" unique_id=1184697229]
+custom_minimum_size = Vector2(400, 92)
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+texture_normal = ExtResource("5_mwkx4")
+ignore_texture_size = true
+stretch_mode = 0

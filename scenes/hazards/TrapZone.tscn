@@ -1,0 +1,19 @@
+[gd_scene format=3 uid="uid://f5plxtx4aap7"]
+
+[ext_resource type="Script" uid="uid://d2xsuuprcscya" path="res://scripts/hazards/TrapZone.gd" id="1_y6jog"]
+[ext_resource type="Texture2D" uid="uid://cf31ol4vckcgs" path="res://assets/sprites/hazards/ground_traps/ground-trap.png" id="2_0n03g"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_0n03g"]
+size = Vector2(72, 60)
+
+[node name="TrapZone" type="Area2D" unique_id=1629387649]
+script = ExtResource("1_y6jog")
+
+[node name="Sprite2D" type="Sprite2D" parent="." unique_id=811878767]
+scale = Vector2(0.15, 0.15)
+texture = ExtResource("2_0n03g")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1014687728]
+shape = SubResource("RectangleShape2D_0n03g")
+
+[connection signal="body_entered" from="." to="." method="_on_body_entered"]
