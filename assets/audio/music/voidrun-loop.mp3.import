@@ -2,7 +2,7 @@
 
 importer="mp3"
 type="AudioStreamMP3"
-uid="uid://hkfbykeivkqd"
+uid="uid://ism6h6i12f4p"
 path="res://.godot/imported/voidrun-loop.mp3-7b1a17a885142a831508de911ccfb423.mp3str"
 
 [deps]
@@ -12,7 +12,7 @@ dest_files=["res://.godot/imported/voidrun-loop.mp3-7b1a17a885142a831508de911ccf
 
 [params]
 
-loop=true
+loop=false
 loop_offset=0
 bpm=0
 beat_count=0

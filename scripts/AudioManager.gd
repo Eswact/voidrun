@@ -9,6 +9,7 @@ const _MUSIC       := preload("res://assets/audio/music/voidrun-loop.mp3")
 const _MENU_MUSIC  := preload("res://assets/audio/music/menu.mp3")
 
 const _MUSIC_VOL_DB := -6.0
+const _SFX_VOL_DB   := -6.0
 
 var sfx_muted:    bool = false
 var music_muted:  bool = false
@@ -36,6 +37,7 @@ func _ready() -> void:
 	_music.stream       = _MUSIC
 	_music.volume_db    = _MUSIC_VOL_DB
 	_music.process_mode = Node.PROCESS_MODE_ALWAYS
+	_music.finished.connect(_on_music_finished)
 	add_child(_music)
 
 
@@ -78,9 +80,15 @@ func toggle_music() -> void:
 	music_toggled.emit(music_muted)
 
 
+func _on_music_finished() -> void:
+	if _music_active and not music_muted:
+		_music.play()
+
+
 func _make(stream: AudioStream) -> AudioStreamPlayer:
 	var p := AudioStreamPlayer.new()
 	p.stream       = stream
+	p.volume_db    = _SFX_VOL_DB
 	p.process_mode = Node.PROCESS_MODE_ALWAYS
 	add_child(p)
 	return p

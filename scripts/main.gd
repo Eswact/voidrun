@@ -1,5 +1,7 @@
 extends Node2D
 
+const _Secrets := preload("res://scripts/Secrets.gd")
+
 const DESIGN_W:         float = 648.0
 const BORDER_SIDE:      float = 40.0
 const IMAGE_BORDER_PX:  float = 224.0  # arena.png üst/alt dekoratif kenar kalınlığı (px)
@@ -38,7 +40,7 @@ var _continue_count: int         = 0
 func _ready() -> void:
 	if OS.get_name() == "Android":
 		var config := RequestConfiguration.new()
-		config.test_device_ids = Secrets.TEST_DEVICE_IDS
+		config.test_device_ids = _Secrets.TEST_DEVICE_IDS
 		MobileAds.set_request_configuration(config)
 		MobileAds.initialize()
 	_setup_arena()

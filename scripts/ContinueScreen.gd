@@ -1,6 +1,8 @@
 class_name ContinueScreen
 extends CanvasLayer
 
+const _Secrets := preload("res://scripts/Secrets.gd")
+
 signal ad_completed
 signal expired
 
@@ -65,7 +67,7 @@ func _load_rewarded_ad() -> void:
 	var callback := RewardedAdLoadCallback.new()
 	callback.on_ad_loaded          = _on_ad_loaded
 	callback.on_ad_failed_to_load  = _on_ad_failed_to_load
-	RewardedAdLoader.new().load(Secrets.ADMOB_AD_UNIT_ID, AdRequest.new(), callback)
+	RewardedAdLoader.new().load(AD_UNIT_ID_TEST, AdRequest.new(), callback)
 
 
 func _on_ad_loaded(ad: RewardedAd) -> void:

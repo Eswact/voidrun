@@ -1,9 +1,10 @@
 extends Node
 
-const _TABLE := "leaderboard"
+const _Secrets := preload("res://scripts/Secrets.gd")
+const _TABLE   := "leaderboard"
 
-var _headers_read:   Array[String]
-var _headers_upsert: Array[String]
+var _headers_read:   PackedStringArray
+var _headers_upsert: PackedStringArray
 
 signal score_submitted
 signal scores_fetched(scores: Array)
@@ -23,13 +24,13 @@ var has_internet:       bool = true
 
 func _ready() -> void:
 	_headers_read = [
-		"apikey: " + Secrets.SUPABASE_KEY,
-		"Authorization: Bearer " + Secrets.SUPABASE_KEY
+		"apikey: " + _Secrets.SUPABASE_KEY,
+		"Authorization: Bearer " + _Secrets.SUPABASE_KEY
 	]
 	_headers_upsert = [
 		"Content-Type: application/json",
-		"apikey: " + Secrets.SUPABASE_KEY,
-		"Authorization: Bearer " + Secrets.SUPABASE_KEY,
+		"apikey: " + _Secrets.SUPABASE_KEY,
+		"Authorization: Bearer " + _Secrets.SUPABASE_KEY,
 		"Prefer: resolution=merge-duplicates,return=minimal"
 	]
 	_submit_req = HTTPRequest.new()
@@ -50,7 +51,7 @@ func _ready() -> void:
 
 
 func submit_score(nick: String, time_seconds: float) -> void:
-	var url  := Secrets.SUPABASE_URL + "/rest/v1/" + _TABLE + "?on_conflict=device_id"
+	var url  := _Secrets.SUPABASE_URL + "/rest/v1/" + _TABLE + "?on_conflict=device_id"
 	var body := JSON.stringify({
 		"device_id":    SaveData.device_id,
 		"nick":         nick.strip_edges(),
@@ -64,7 +65,7 @@ func get_top_scores(limit: int = 100, weekly: bool = false) -> void:
 	if not _cache[key].is_empty():
 		scores_fetched.emit(_cache[key])
 	var url := "%s/rest/v1/%s?select=nick,time_seconds,device_id&order=time_seconds.desc&limit=%d" \
-		% [Secrets.SUPABASE_URL, _TABLE, limit]
+		% [_Secrets.SUPABASE_URL, _TABLE, limit]
 	if weekly:
 		if _fetching_weekly: return
 		_fetching_weekly = true
@@ -91,8 +92,9 @@ func _on_submit_done(result: int, code: int, _h: PackedStringArray, _b: PackedBy
 
 func get_rank(time_seconds: float) -> void:
 	var url     := "%s/rest/v1/%s?select=id&time_seconds=gt.%s" \
-		% [Secrets.SUPABASE_URL, _TABLE, str(time_seconds)]
-	var headers := _headers_read + ["Prefer: count=exact"]
+		% [_Secrets.SUPABASE_URL, _TABLE, str(time_seconds)]
+	var headers: PackedStringArray = _headers_read.duplicate()
+	headers.append("Prefer: count=exact")
 	_rank_req.request(url, headers)
 
 
