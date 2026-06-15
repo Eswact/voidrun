@@ -84,7 +84,8 @@ func _fire() -> void:
 	var edge      := randi() % 4
 	var spawn_pos := _edge_spawn_pos(edge)
 
-	_show_warning(_edge_warn_pos(spawn_pos, edge))
+	if _player_near_edge(edge, spawn_pos):
+		_show_warning(_edge_warn_pos(spawn_pos, edge))
 
 	await get_tree().create_timer(_warn_time).timeout
 
@@ -151,6 +152,23 @@ func _edge_warn_pos(spawn_pos: Vector2, edge: int) -> Vector2:
 		2: return Vector2(rect.position.x + 5.0, spawn_pos.y)
 		3: return Vector2(rect.end.x - 5.0,      spawn_pos.y)
 	return spawn_pos
+
+
+func _player_near_edge(edge: int, spawn_pos: Vector2) -> bool:
+	if _player == null:
+		return false
+	var rect     := _play_rect()
+	var vis_h    := _cam_bot() - _cam_top()
+	var thresh_v := vis_h * 0.35
+	var thresh_h := rect.size.x * 0.35
+	var py       := _player.global_position.y
+	var px       := _player.global_position.x
+	match edge:
+		0: return py - _cam_top()      < thresh_v
+		1: return _cam_bot() - py      < thresh_v
+		2: return (px - rect.position.x < thresh_h) and (absf(spawn_pos.y - py) < vis_h * 0.45)
+		3: return (rect.end.x - px     < thresh_h) and (absf(spawn_pos.y - py) < vis_h * 0.45)
+	return false
 
 
 func _show_warning(pos: Vector2) -> void:

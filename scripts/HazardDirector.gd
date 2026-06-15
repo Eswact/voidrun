@@ -5,6 +5,7 @@ const _LaserStreamScript  := preload("res://scripts/hazards/LaserStream.gd")
 
 signal difficulty_changed(phase: int)
 signal shake_requested(intensity: float, duration: float)
+signal section_started(name: String)
 
 @export var player_path: NodePath
 
@@ -20,6 +21,7 @@ var _play_rect: Rect2    = Rect2()
 var _current_phase: int = -1
 var _phase_thresholds: Array = [0, 30, 60, 90]
 var _timeline_index: int = 0
+var _catching_up: bool = false
 
 var timeline: Array = [
 	# ══ BÖLÜM 1 · ISINMA (0-20s) ══════════════════════════════════════════
@@ -37,7 +39,7 @@ var timeline: Array = [
 	{ "at": 68,  "update": "diag_stream",     "params": { "rate": 1.2,  "speed": 260.0 } },
 
 	# ══ ÖZEL 1 · SEKEN MERMİLER (75-110s) ═════════════════════════════════
-	{ "at": 75,  "shake": true, "intensity": 10.0, "duration": 0.5 },
+	{ "at": 75,  "shake": true, "intensity": 10.0, "duration": 0.5, "section": "ricochet" },
 	{ "at": 75,  "stop":  "straight_stream" },
 	{ "at": 75,  "stop":  "diag_stream" },
 	{ "at": 75,  "stop":  "explosive_projectile" },
@@ -51,12 +53,12 @@ var timeline: Array = [
 	{ "at": 110, "spawn": "straight_stream",  "params": { "rate": 0.9, "speed": 150.0, "straight": true, "warn_time": 0.85 } },
 	{ "at": 110, "spawn": "diag_stream",      "params": { "rate": 0.85, "speed": 265.0, "straight": false, "warn_time": 0.65 } },
 	{ "at": 110, "spawn": "explosive_projectile", "params": { "rate": 0.3, "spread_count": 6, "warn_duration": 1.0 } },
-	{ "at": 110, "spawn": "ground_crack",     "params": { "count": 2, "warn_duration": 2.0, "active_duration": 3.2 } },
+	{ "at": 110, "spawn": "ground_crack",     "params": { "count": 2, "warn_duration": 2.0, "active_duration": 3.0 } },
 	{ "at": 120, "spawn": "laser_stream",     "params": { "count": 1, "gap": 10.0, "h_bias": 0.8, "warn_time": 1.0, "lethal_time": 1.9, "stagger": 0.0 } },
 	{ "at": 132, "update": "straight_stream", "params": { "rate": 1.2,  "speed": 163.0 } },
 
 	# ══ ÖZEL 2 · TAKİP EDEN MERMİLER (155-190s) ═══════════════════════════
-	{ "at": 155, "shake": true, "intensity": 10.0, "duration": 0.5 },
+	{ "at": 155, "shake": true, "intensity": 10.0, "duration": 0.5, "section": "pursuit" },
 	{ "at": 155, "stop":  "straight_stream" },
 	{ "at": 155, "stop":  "diag_stream" },
 	{ "at": 155, "stop":  "explosive_projectile" },
@@ -68,27 +70,29 @@ var timeline: Array = [
 	# ══ BÖLÜM 5 · YOĞUN (190-250s) ════════════════════════════════════════
 	{ "at": 190, "shake": true, "intensity": 7.0, "duration": 0.4 },
 	{ "at": 190, "stop":  "homing_stream" },
-	{ "at": 190, "spawn": "straight_stream",  "params": { "rate": 1.0,  "speed": 163.0, "straight": true, "warn_time": 0.78 } },
-	{ "at": 190, "spawn": "diag_stream",      "params": { "rate": 1.15, "speed": 280.0, "straight": false, "warn_time": 0.58 } },
-	{ "at": 190, "spawn": "explosive_projectile", "params": { "rate": 0.4, "spread_count": 7, "warn_duration": 0.85 } },
-	{ "at": 190, "spawn": "ground_crack",     "params": { "count": 2, "warn_duration": 1.5, "active_duration": 2.8 } },
-	{ "at": 200, "spawn": "laser_stream",     "params": { "count": 1, "gap": 9.0,  "h_bias": 0.75, "warn_time": 1.0, "lethal_time": 2.0, "stagger": 0.0 } },
-	{ "at": 215, "update": "diag_stream",     "params": { "rate": 1.4,  "speed": 300.0 } },
-	{ "at": 215, "update": "explosive_projectile", "params": { "rate": 0.55, "spread_count": 9 } },
-	{ "at": 235, "update": "ground_crack",    "params": { "count": 3, "warn_duration": 1.3 } },
+	{ "at": 190, "spawn": "straight_stream",  "params": { "rate": 1.0, "speed": 160.0, "straight": true,  "warn_time": 0.82 } },
+	{ "at": 195, "spawn": "ground_crack",     "params": { "count": 2,   "warn_duration": 2.0, "active_duration": 3.0 } },
+	{ "at": 195, "spawn": "diag_stream",      "params": { "rate": 1.1, "speed": 255.0, "straight": false, "warn_time": 0.65 } },
+	{ "at": 200, "spawn": "explosive_projectile", "params": { "rate": 0.25, "spread_count": 5, "warn_duration": 1.0 } },
+	{ "at": 210, "update": "explosive_projectile", "params": { "rate": 0.5, "spread_count": 7 } },
+	{ "at": 220, "update": "diag_stream",     "params": { "rate": 1.35, "speed": 298.0 } },
+	{ "at": 220, "spawn": "laser_stream",     "params": { "count": 1,   "gap": 10.0, "h_bias": 0.78, "warn_time": 1.1, "lethal_time": 2.0, "stagger": 0.0 } },
+	{ "at": 230, "update": "ground_crack",    "params": { "count": 3,   "warn_duration": 1.75 } },
 
 	# ══ ÖZEL 3 · SEKEN + PATLAYAN KOMBO (250-285s) ═════════════════════════
-	{ "at": 250, "shake": true, "intensity": 12.0, "duration": 0.6 },
+	{ "at": 250, "shake": true, "intensity": 12.0, "duration": 0.6, "section": "detonation" },
 	{ "at": 250, "stop":  "straight_stream" },
 	{ "at": 250, "stop":  "diag_stream" },
 	{ "at": 250, "stop":  "ground_crack" },
 	{ "at": 250, "stop":  "laser_stream" },
-	{ "at": 250, "spawn": "bounce_stream",    "params": { "rate": 1.3, "speed": 260.0, "max_bullets": 48 } },
-	{ "at": 268, "update": "bounce_stream",   "params": { "rate": 1.65, "speed": 278.0 } },
+	{ "at": 250, "update": "explosive_projectile", "params": { "rate": 0.4, "spread_count": 7 } },
+	{ "at": 250, "spawn": "bounce_stream",    "params": { "rate": 1.1, "speed": 260.0, "max_bullets": 48 } },
+	{ "at": 270, "update": "bounce_stream",   "params": { "rate": 1.5, "speed": 272.0 } },
 
 	# ══ ÖZEL 4 · LAZERLER (285-320s) ══════════════════════════════════════════
-	{ "at": 285, "shake": true, "intensity": 10.0, "duration": 0.6 },
+	{ "at": 285, "shake": true, "intensity": 10.0, "duration": 0.6, "section": "laser-grid" },
 	{ "at": 285, "stop":  "bounce_stream" },
+	{ "at": 285, "update": "explosive_projectile", "params": { "rate": 0.55, "spread_count": 7 } },
 	{ "at": 285, "spawn": "laser_stream",     "params": { "h_bias": 0.75, "count": 2, "stagger": 0.55, "warn_time": 1.0, "lethal_time": 2.2, "gap": 0.45 } },
 	{ "at": 302, "update": "laser_stream",    "params": { "count": 3, "stagger": 0.0 } },
 	{ "at": 313, "update": "laser_stream",    "params": { "count": 1, "sweep": true, "sweep_speed": 35.0, "warn_time": 1.2 } },
@@ -96,29 +100,43 @@ var timeline: Array = [
 	# ══ FİNAL + ENDLESS GİRİŞ (320s+) ══════════════════════════════════════
 	{ "at": 320, "shake": true, "intensity": 8.0, "duration": 0.4 },
 	{ "at": 320, "stop":  "laser_stream" },
-	{ "at": 320, "spawn": "straight_stream",  "params": { "rate": 1.5,  "speed": 175.0, "straight": true, "warn_time": 0.7 } },
+	{ "at": 320, "spawn": "straight_stream",  "params": { "rate": 1.5,  "speed": 165.0, "straight": true, "warn_time": 0.7 } },
 	{ "at": 320, "spawn": "diag_stream",      "params": { "rate": 1.6,  "speed": 320.0, "straight": false, "warn_time": 0.5 } },
-	{ "at": 320, "update": "explosive_projectile", "params": { "rate": 0.8, "spread_count": 10, "warn_duration": 0.75 } },
+	{ "at": 320, "update": "explosive_projectile", "params": { "rate": 0.8, "spread_count": 8, "warn_duration": 0.75 } },
 	{ "at": 320, "spawn": "ground_crack",     "params": { "count": 4, "warn_duration": 1.2, "active_duration": 2.5 } },
 	{ "at": 325, "spawn": "laser_stream",     "params": { "count": 1, "gap": 10.0, "h_bias": 0.75, "warn_time": 1.0, "lethal_time": 2.0, "stagger": 0.0 } },
 
 	# ══ ENDLESS MODE (335s+) ════════════════════════════════════════════════
+	# straight_stream burada dondurulur — bir daha güncellenmez
+	# Döngü: HIZ → YOĞUNLUK → HIZ → YOĞUNLUK ...
 	{ "at": 335, "shake": true, "intensity": 14.0, "duration": 0.7 },
-	{ "at": 355, "update": "laser_stream",    "params": { "gap": 9.0 } },
-	{ "at": 355, "update": "straight_stream", "params": { "rate": 2.0,  "speed": 190.0 } },
-	{ "at": 355, "update": "diag_stream",     "params": { "rate": 2.0,  "speed": 340.0 } },
-	{ "at": 355, "update": "explosive_projectile", "params": { "rate": 1.0, "spread_count": 12, "warn_duration": 0.65 } },
-	{ "at": 385, "update": "ground_crack",    "params": { "count": 5,  "warn_duration": 1.0 } },
-	{ "at": 395, "update": "straight_stream", "params": { "rate": 2.5,  "speed": 205.0, "warn_time": 0.6 } },
-	{ "at": 395, "update": "diag_stream",     "params": { "rate": 2.5,  "speed": 360.0 } },
-	{ "at": 425, "update": "explosive_projectile", "params": { "rate": 1.2, "spread_count": 14, "warn_duration": 0.55 } },
-	{ "at": 435, "update": "ground_crack",    "params": { "count": 6,  "warn_duration": 0.9 } },
-	{ "at": 455, "update": "straight_stream", "params": { "rate": 3.0,  "speed": 220.0 } },
-	{ "at": 455, "update": "diag_stream",     "params": { "rate": 3.0,  "speed": 380.0 } },
-	{ "at": 485, "update": "explosive_projectile", "params": { "rate": 1.4, "spread_count": 16, "warn_duration": 0.5 } },
-	{ "at": 495, "update": "ground_crack",    "params": { "count": 7,  "warn_duration": 0.8 } },
-	{ "at": 515, "update": "straight_stream", "params": { "rate": 3.5,  "speed": 240.0, "warn_time": 0.5 } },
-	{ "at": 515, "update": "diag_stream",     "params": { "rate": 3.5,  "speed": 400.0, "warn_time": 0.4 } },
+
+	# — Döngü 1: HIZ (355-394s) ——————————————————————————————————————————
+	{ "at": 355, "update": "diag_stream",           "params": { "speed": 348.0 } },
+	{ "at": 355, "update": "laser_stream",          "params": { "gap": 8.5 } },
+	{ "at": 355, "update": "explosive_projectile",  "params": { "warn_duration": 0.68 } },
+
+	# — Döngü 2: YOĞUNLUK (395-454s) ————————————————————————————————————
+	{ "at": 395, "update": "diag_stream",           "params": { "rate": 1.9 } },
+	{ "at": 395, "update": "explosive_projectile",  "params": { "rate": 1.0, "spread_count": 10 } },
+	{ "at": 420, "update": "ground_crack",          "params": { "count": 5, "warn_duration": 1.0 } },
+	{ "at": 435, "update": "laser_stream",          "params": { "count": 2, "stagger": 0.5 } },
+
+	# — Döngü 3: HIZ (455-509s) ——————————————————————————————————————————
+	{ "at": 455, "update": "diag_stream",           "params": { "speed": 372.0 } },
+	{ "at": 455, "update": "explosive_projectile",  "params": { "warn_duration": 0.58 } },
+	{ "at": 455, "update": "laser_stream",          "params": { "gap": 7.8, "lethal_time": 1.8 } },
+
+	# — Döngü 4: YOĞUNLUK (510-564s) ————————————————————————————————————
+	{ "at": 510, "update": "diag_stream",           "params": { "rate": 2.3 } },
+	{ "at": 510, "update": "explosive_projectile",  "params": { "rate": 1.2, "spread_count": 12 } },
+	{ "at": 535, "update": "ground_crack",          "params": { "count": 6, "warn_duration": 0.9 } },
+	{ "at": 550, "update": "laser_stream",          "params": { "count": 3 } },
+
+	# — Döngü 5: HIZ (565s+) ——————————————————————————————————————————————
+	{ "at": 565, "update": "diag_stream",           "params": { "speed": 398.0 } },
+	{ "at": 565, "update": "explosive_projectile",  "params": { "warn_duration": 0.5 } },
+	{ "at": 565, "update": "laser_stream",          "params": { "gap": 7.2 } },
 ]
 
 var _hazard_scenes: Dictionary = {
@@ -197,6 +215,7 @@ func restart_from(time: float) -> void:
 	_timeline_index = 0
 	_current_phase  = -1
 	is_running      = true
+	_catching_up    = true
 
 
 func _process(delta: float) -> void:
@@ -226,9 +245,13 @@ func _check_timeline() -> void:
 			elif entry.has("update"):
 				_update_hazard_type(entry["update"], entry["params"])
 			elif entry.has("shake"):
-				shake_requested.emit(entry.get("intensity", 8.0), entry.get("duration", 0.4))
+				if not _catching_up:
+					shake_requested.emit(entry.get("intensity", 8.0), entry.get("duration", 0.4))
+					if entry.has("section"):
+						section_started.emit(entry["section"])
 			_timeline_index += 1
 		else:
+			_catching_up = false
 			break
 
 

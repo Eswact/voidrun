@@ -37,7 +37,17 @@ func spawn(pos: Vector2, type: int) -> void:
 	_sprite.scale = Vector2(s, s)
 	show()
 	_start_pulse()
+	get_tree().create_timer(LIFETIME - 5.0).timeout.connect(_start_blink)
 	get_tree().create_timer(LIFETIME).timeout.connect(_on_expired)
+
+
+func _start_blink() -> void:
+	if not _alive:
+		return
+	_kill_tween()
+	_tween = create_tween().set_loops()
+	_tween.tween_property(self, "modulate:a", 0.15, 0.22)
+	_tween.tween_property(self, "modulate:a", 1.0,  0.22)
 
 
 func _on_expired() -> void:

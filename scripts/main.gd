@@ -50,6 +50,7 @@ func _ready() -> void:
 	add_child(_pause_screen)
 	$Player.dead.connect(_on_player_dead)
 	$HazardDirector.shake_requested.connect(shake)
+	$HazardDirector.section_started.connect(_on_section_started)
 	$HazardDirector.start()
 
 	_pause_button.texture_normal = load("res://assets/sprites/mobile_ui/pause.png")
@@ -204,10 +205,31 @@ func _do_screen_clear() -> void:
 			h.activate({})
 
 
+func _on_section_started(section_name: String) -> void:
+	var tex: Texture2D = load("res://assets/sprites/mobile_ui/section-%s.png" % section_name)
+	if tex == null:
+		return
+	var spr        := Sprite2D.new()
+	spr.texture     = tex
+	var target_w   := DESIGN_W * 0.75
+	var s          := target_w / float(tex.get_width())
+	spr.scale       = Vector2(s, s)
+	spr.position    = get_viewport().get_visible_rect().get_center()
+	spr.z_index     = 10
+	spr.modulate.a  = 0.0
+	$MobileUI.add_child(spr)
+	var tw := spr.create_tween()
+	tw.tween_property(spr, "modulate:a", 1.0, 0.2)
+	tw.tween_interval(1.8)
+	tw.tween_property(spr, "modulate:a", 0.0, 0.3)
+	tw.tween_callback(spr.queue_free)
+
+
 func _show_cleared_fx() -> void:
 	var spr       := Sprite2D.new()
 	spr.texture    = TEXTURE_CLEARED
-	spr.scale      = Vector2(0.5, 0.5)
+	var s          := (DESIGN_W * 0.75) / float(TEXTURE_CLEARED.get_width())
+	spr.scale      = Vector2(s, s)
 	spr.position   = get_viewport().get_visible_rect().get_center()
 	spr.z_index    = 10
 	spr.modulate.a = 0.0

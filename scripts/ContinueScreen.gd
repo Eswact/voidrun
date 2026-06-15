@@ -11,8 +11,7 @@ signal expired
 @export var _status_label:    Label      = null
 @export var _close_btn:       BaseButton = null
 
-const COUNTDOWN  := 5.0
-const AD_UNIT_ID_TEST := "ca-app-pub-3940256099942544/5224354917"
+const COUNTDOWN := 5.0
 
 var _time_left:       float                    = COUNTDOWN
 var _ad_watching:     bool                     = false
@@ -67,7 +66,8 @@ func _load_rewarded_ad() -> void:
 	var callback := RewardedAdLoadCallback.new()
 	callback.on_ad_loaded          = _on_ad_loaded
 	callback.on_ad_failed_to_load  = _on_ad_failed_to_load
-	RewardedAdLoader.new().load(AD_UNIT_ID_TEST, AdRequest.new(), callback)
+	var ad_unit_id: String = "ca-app-pub-3940256099942544/5224354917"
+	RewardedAdLoader.new().load(ad_unit_id, AdRequest.new(), callback)
 
 
 func _on_ad_loaded(ad: RewardedAd) -> void:
@@ -88,8 +88,7 @@ func _on_ad_dismissed() -> void:
 		expired.emit()
 
 
-func _on_ad_failed_to_load(error: LoadAdError) -> void:
-	print("AdMob failed: code=", error.code, " msg=", error.message)
+func _on_ad_failed_to_load(_error: LoadAdError) -> void:
 	_ad_watching = false
 	_watch_ad_btn.disabled = false
 	if _close_btn: _close_btn.disabled = false
